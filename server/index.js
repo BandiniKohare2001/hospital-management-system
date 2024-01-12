@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import express from "express";
 import dotenv from "dotenv";
 import User from "./models/User.js";
-// import Product from "./models/Product.js";
+
 dotenv.config();
 
 const app = express();
@@ -10,15 +10,19 @@ app.use(express.json());
 
 
 const connectMongoDB = async () => {
+ try{
   const conn = await mongoose.connect(process.env.ECOMMERCE_URI)
 
   if (conn) {
     console.log('MongoDB connected successfully.');
-  }
+  } 
+ } catch(e){
+  console.log(e.message)
+}
 };
 connectMongoDB();
 // --------------user login-----------------
-app.get('/login', async (req, res) => {
+app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   const findUser = await User.findOne({
